@@ -18,6 +18,10 @@ dist-ssr
 .env.production.local
 .env.development.local
 
+# Markdown documentation files (exclude from repo)
+*.md
+!README.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
