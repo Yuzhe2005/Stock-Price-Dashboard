@@ -99,10 +99,6 @@ This project uses the Alpha Vantage API (free tier):
 
 Deployed on Vercel. The application automatically builds and deploys on every push to the main branch.
 
-## License
-
-MIT
-
 ## Author
 
-Built as part of a coding challenge.
+Yuzhe(David) Wang
