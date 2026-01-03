@@ -12,39 +12,39 @@
 
 // Top 100 S&P 500 stocks by market capitalization (most popular/liquid)
 export const SP500_STOCKS = [
-  // Technology (科技)
+  // Technology
   'AAPL', 'MSFT', 'NVDA', 'GOOGL', 'GOOG', 'AMZN', 'META', 'TSLA', 'AVGO', 'ORCL',
   'NFLX', 'CRM', 'AMD', 'INTC', 'ADBE', 'CSCO', 'QCOM', 'TXN', 'AMAT', 'MU',
   
-  // Financial Services (金融)
+  // Financial Services
   'JPM', 'BAC', 'WFC', 'GS', 'MS', 'C', 'SCHW', 'BLK', 'CME', 'AXP',
   
-  // Healthcare (医疗)
+  // Healthcare
   'UNH', 'JNJ', 'ABBV', 'LLY', 'MRK', 'TMO', 'ABT', 'DHR', 'BMY', 'AMGN',
   'CVS', 'CI', 'HUM', 'ELV', 'SYK', 'ISRG', 'ZTS', 'BSX', 'BDX', 'EW',
   
-  // Consumer (消费)
+  // Consumer
   'WMT', 'COST', 'HD', 'NKE', 'SBUX', 'TGT', 'LOW', 'TJX', 'BKNG', 'MCD',
   
-  // Industrial (工业)
+  // Industrial
   'BA', 'CAT', 'GE', 'HON', 'RTX', 'LMT', 'DE', 'EMR', 'ETN', 'ITW',
   
-  // Energy (能源)
+  // Energy
   'XOM', 'CVX', 'COP', 'SLB', 'EOG', 'MPC', 'PSX', 'VLO', 'OXY', 'HAL',
   
-  // Communication Services (通信)
+  // Communication Services
   'VZ', 'T', 'CMCSA', 'DIS', 'NFLX', 'CHTR', 'TMUS', 'FOX', 'FOXA', 'PARA',
   
-  // Consumer Staples (必需消费品)
+  // Consumer Staples
   'PG', 'KO', 'PEP', 'WMT', 'COST', 'CL', 'KMB', 'MDLZ', 'GIS', 'HSY',
   
-  // Utilities (公用事业)
+  // Utilities
   'NEE', 'DUK', 'SO', 'AEP', 'SRE', 'EXC', 'XEL', 'ES', 'PEG', 'ETR',
   
-  // Real Estate (房地产)
+  // Real Estate
   'AMT', 'PLD', 'EQIX', 'PSA', 'WELL', 'SPG', 'DLR', 'O', 'VICI', 'CBRE',
   
-  // Materials (材料)
+  // Materials
   'LIN', 'APD', 'ECL', 'SHW', 'DD', 'FCX', 'NEM', 'PPG', 'DOW', 'VALE',
 ];
 
@@ -61,9 +61,9 @@ export function getSP500Stocks(limit?: number): string[] {
 
 /**
  * Get a smaller subset for demonstration (recommended for free API)
- * Returns top 5 stocks (limited by API rate limit: 5 calls/minute)
+ * Returns top 3 stocks to ensure reliable API calls
  */
 export function getSP500DemoStocks(): string[] {
-  return SP500_STOCKS.slice(0, 5);
+  return SP500_STOCKS.slice(0, 3);
 }
 

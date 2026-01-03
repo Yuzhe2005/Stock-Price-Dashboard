@@ -7,9 +7,9 @@ import { getSP500DemoStocks, getSP500Stocks } from './sp500Stocks';
 const ALPHA_VANTAGE_API_KEY = import.meta.env.VITE_ALPHA_VANTAGE_API_KEY || 'demo';
 const ALPHA_VANTAGE_API_URL = 'https://www.alphavantage.co/query';
 
-// Use S&P 500 stocks (top 5 stocks)
-// Free API allows 5 calls/minute, 500 calls/day: 5 stocks = 100 refreshes/day
-const DEMO_STOCKS = getSP500DemoStocks(); // Using top 5 stocks (within rate limit)
+// Use S&P 500 stocks (top 3 stocks)
+// Free API allows 5 calls/minute, 500 calls/day: 3 stocks = ~166 refreshes/day
+const DEMO_STOCKS = getSP500DemoStocks(); // Using top 3 stocks for reliable API calls
 
 /**
  * Fetch stock price data for a single symbol using Alpha Vantage API
@@ -41,16 +41,30 @@ export async function fetchStockPrice(symbol: string): Promise<StockData | null>
       return null;
     }
 
+    // Check for Information field (API limit or upgrade message)
+    if (data['Information']) {
+      console.warn(`API information for ${symbol}:`, data['Information']);
+      // Still try to parse if Global Quote exists
+    }
+
     // Check for rate limit message
     if (data['Note']) {
-      console.error(`API rate limit reached for ${symbol}:`, data['Note']);
+      console.warn(`API rate limit reached for ${symbol}:`, data['Note']);
       return null;
     }
 
     const quote = data['Global Quote'];
 
-    if (!quote || !quote['05. price']) {
-      console.error(`Invalid API response for ${symbol}:`, data);
+    // Check if quote exists and has required fields
+    if (!quote || Object.keys(quote).length === 0) {
+      // API may return empty Global Quote object when rate limited
+      console.warn(`No quote data for ${symbol} - may be rate limited`);
+      return null;
+    }
+
+    const priceStr = quote['05. price'];
+    if (!priceStr || priceStr === 'N/A' || priceStr === '' || priceStr.trim() === '') {
+      console.warn(`Invalid price data for ${symbol}:`, priceStr);
       return null;
     }
 
@@ -70,26 +84,12 @@ export async function fetchStockPrice(symbol: string): Promise<StockData | null>
 
 /**
  * Fetch stock price data for multiple symbols
- * Uses sequential requests to respect API rate limit (5 calls/minute)
+ * Uses parallel requests (3 stocks should be within rate limit)
  */
 export async function fetchMultipleStocks(symbols: string[]): Promise<StockData[]> {
-  const results: StockData[] = [];
-  
-  // Sequential requests with delay to respect rate limit
-  for (let i = 0; i < symbols.length; i++) {
-    const stock = await fetchStockPrice(symbols[i]);
-    if (stock) {
-      results.push(stock);
-    }
-    
-    // Add delay between requests (except for the last one)
-    // 12 seconds delay = 5 requests per minute (60/5 = 12)
-    if (i < symbols.length - 1) {
-      await new Promise(resolve => setTimeout(resolve, 12000)); // 12 seconds
-    }
-  }
-  
-  return results;
+  const promises = symbols.map(symbol => fetchStockPrice(symbol));
+  const results = await Promise.all(promises);
+  return results.filter((stock): stock is StockData => stock !== null);
 }
 
 /**
