@@ -1,5 +1,5 @@
-import { StockData, StockAPIResponse } from '../types/stock';
-import { getSP500DemoStocks, getSP500Stocks } from './sp500Stocks';
+import { StockData } from '../types/stock';
+import { getSP500DemoStocks } from './sp500Stocks';
 
 // Alpha Vantage API configuration
 // Free tier: 5 API calls per minute, 500 calls per day
